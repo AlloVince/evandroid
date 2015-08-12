@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">evandroid</string>
+    <string name="hello_world">Hello AlloVince</string>
+    <string name="action_settings">Settings</string>
+</resources>
