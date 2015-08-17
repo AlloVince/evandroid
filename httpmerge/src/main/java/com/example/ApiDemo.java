@@ -1,5 +1,8 @@
 package com.example;
 
+import com.example.execption.ClientInputException;
+import com.example.execption.ServerException;
+import com.google.gson.Gson;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.OkHttpClient;
@@ -17,6 +20,7 @@ import org.jdeferred.multiple.MultipleResults;
 import org.jdeferred.multiple.OneReject;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 
 public class ApiDemo {
@@ -97,7 +101,29 @@ public class ApiDemo {
     }
     */
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        RestfulApi.promiseApiCall(
+                "http://api.wallstreetcn.com/v2/users/me"
+                //"http://pay.wallstreetcn.com/"
+        ).done(new DoneCallback() {
+            @Override
+            public void onDone(Object result) {
+                System.out.println(result);
+            }
+        }).fail(new FailCallback() {
+            @Override
+            public void onFail(Object obj) {
+                if (!(obj instanceof ClientInputException)) {
+                    return;
+                }
+                ClientInputException exception = (ClientInputException) obj;
+                exception.printStackTrace();
+            }
+        });
+
+    }
+
+    public static void main2(String[] args) throws Exception {
         ApiDemo example = new ApiDemo();
 
         //Sync Demo
@@ -113,25 +139,28 @@ public class ApiDemo {
         }
         */
 
+        final Gson gson = new Gson();
+
         //Promise single Demo
-        /*
-        getPromise("http://api.xgb.wallstcn.com/v2/policies/get/3")
-                .done(new DoneCallback() {
-                    public void onDone(Object response) {
-                        try {
-                            System.out.println(((Response) response).body().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                })
-                .fail(new FailCallback() {
-                    public void onFail(Object result) {
-                        System.out.println("Failed");
-                        ((Exception) result).printStackTrace();
-                    }
-                });
-        */
+        getPromise(
+                "http://api.xgb.wallstcn.com/v2/policies/get/1"
+        ).done(new DoneCallback() {
+            public void onDone(Object response) {
+                try {
+                    String res = ((Response) response).body().string();
+                    Policy policy = gson.fromJson(res, Policy.class);
+
+                    System.out.println(policy);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).fail(new FailCallback() {
+            public void onFail(Object result) {
+                System.out.println("Failed");
+                ((Exception) result).printStackTrace();
+            }
+        });
 
         final DefaultDeferredManager dm = new DefaultDeferredManager();
         /*
@@ -153,6 +182,7 @@ public class ApiDemo {
 
 
         //Pipe example
+        /*
         getPromise(
                "http://api.xgb.wallstcn.com/v2/policies/get/1"
         ).done(new DoneCallback() {
@@ -183,6 +213,7 @@ public class ApiDemo {
                 System.out.println(result);
             }
         });
+        */
 
 
     }
