@@ -22,14 +22,4 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.mcxiaoke.volley:library:1.0.+'            // https://github.com/mcxiaoke/android-volley
-    compile 'com.squareup.retrofit:retrofit:1.9.+'         // http://square.github.io/retrofit/
-    compile 'com.squareup.okhttp:okhttp:2.4.+'             // http://square.github.io/okhttp/
-    compile 'com.squareup.picasso:picasso:2.5.2'           // https://github.com/square/picasso
-    compile 'com.google.code.gson:gson:2.3.+'              // https://github.com/google/gson
-    compile 'org.jdeferred:jdeferred-android-aar:1.2.+'    // https://github.com/jdeferred/jdeferred
-    //compile 'com.loopj.android:android-async-http:1.4.8'   // http://loopj.com/android-async-http/
-    //testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.9.+'
-    testCompile 'org.robolectric:robolectric:3.0'
 }

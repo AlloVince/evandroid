@@ -1,12 +1,11 @@
-package com.httpmerge.execption;
+package resthttp.execption;
 
-import java.beans.Beans;
 import java.util.List;
 
 /**
  * Created by allovince on 15/8/17.
  */
-public class RestErrorMessage extends Beans {
+public class RestErrorMessage {
 
     /**
      * errors : [{"message":"ERR_AUTH_TOKEN_NOT_INPUT","message_human":"Token未输入","code":10000}]

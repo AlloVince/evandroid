@@ -1,4 +1,4 @@
-package com.httpmerge.execption;
+package resthttp.execption;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -98,8 +98,8 @@ public class RestBaseException extends ReflectiveOperationException implements R
 
         try {
             String body = response.body().string();
-            com.httpmerge.execption.RestErrorMessage errorMessage = gson.fromJson(body, com.httpmerge.execption.RestErrorMessage.class);
-            com.httpmerge.execption.RestErrorMessage.ErrorsEntity error = errorMessage.getErrors().get(0);
+            RestErrorMessage errorMessage = gson.fromJson(body, RestErrorMessage.class);
+            RestErrorMessage.ErrorsEntity error = errorMessage.getErrors().get(0);
             apiErrorMessage = error.getMessage();
             apiReadableErrorMessage = error.getMessageHuman();
         } catch (JsonSyntaxException e) {

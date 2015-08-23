@@ -1,7 +1,5 @@
-package com.httpmerge;
+package resthttp;
 
-import com.httpmerge.execption.ClientInputException;
-import com.httpmerge.execption.ServerException;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -15,6 +13,9 @@ import org.jdeferred.impl.DeferredObject;
 
 import java.io.IOException;
 
+import resthttp.execption.ClientInputException;
+import resthttp.execption.ServerException;
+
 /**
  * Created by allovince on 15/8/17.
  */
@@ -23,6 +24,9 @@ public class RestfulClient {
 
     private static FailCallback serverFailedHandler = null;
 
+    public static String test() {
+        return "world";
+    }
     public static void registerServerFailedHandler(FailCallback handler) {
         serverFailedHandler = handler;
     }

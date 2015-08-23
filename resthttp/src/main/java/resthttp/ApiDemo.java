@@ -1,6 +1,5 @@
-package com.httpmerge;
+package resthttp;
 
-import com.httpmerge.execption.ClientInputException;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Headers;
@@ -16,6 +15,8 @@ import org.jdeferred.impl.DefaultDeferredManager;
 import org.jdeferred.impl.DeferredObject;
 
 import java.io.IOException;
+
+import resthttp.execption.ClientInputException;
 
 
 public class ApiDemo {

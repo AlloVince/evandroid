@@ -6,7 +6,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.gson.Gson;
+import com.squareup.okhttp.Response;
+
+import org.jdeferred.DoneCallback;
+import org.jdeferred.FailCallback;
+
+import java.io.IOException;
+
+import resthttp.RestfulClient;
+import resthttp.execption.ClientInputException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,10 +22,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Gson g = new Gson();
-        Integer one = g.fromJson("1", Integer.class);
-        Log.d("Hello", String.valueOf(one));
 
+        //Log.w("avnpc", RestfulClient.test());
+        RestfulClient.promiseApiCall(
+                "http://api.wallstreetcn.com/v2/policies/get/1318"
+        ).done(new DoneCallback() {
+            public void onDone(Object result) {
+                Response response = (Response) result;
+                try {
+                    Log.w("avnpc", response.body().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).fail(new FailCallback() {
+            public void onFail(Object obj) {
+                if (!(obj instanceof ClientInputException)) {
+                    return;
+                }
+                ClientInputException exception = (ClientInputException) obj;
+                Log.w("avnpc", exception);
+            }
+        });
     }
 
 

@@ -1,4 +1,4 @@
-package com.httpmerge;
+package resthttp;
 
 import com.google.gson.annotations.SerializedName;
 

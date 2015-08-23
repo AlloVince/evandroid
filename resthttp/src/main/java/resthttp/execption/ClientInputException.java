@@ -1,4 +1,4 @@
-package com.httpmerge.execption;
+package resthttp.execption;
 
 import com.squareup.okhttp.Response;
 
