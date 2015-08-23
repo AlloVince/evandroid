@@ -1,7 +1,7 @@
-package com.example;
+package com.httpmerge;
 
-import com.example.execption.ClientInputException;
-import com.example.execption.ServerException;
+import com.httpmerge.execption.ClientInputException;
+import com.httpmerge.execption.ServerException;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -14,21 +14,30 @@ import org.jdeferred.Promise;
 import org.jdeferred.impl.DeferredObject;
 
 import java.io.IOException;
-import java.util.concurrent.Callable;
 
 /**
  * Created by allovince on 15/8/17.
  */
-public class RestfulApi {
+public class RestfulClient {
     private static OkHttpClient httpClient = new OkHttpClient();
 
-    private static Callable serverFailedHandler;
+    private static FailCallback serverFailedHandler = null;
 
-    public static void registerServerFailedHandler(Callable handler) {
+    public static void registerServerFailedHandler(FailCallback handler) {
         serverFailedHandler = handler;
     }
 
-    public static Callable getServerFaileHandler() {
+    public static FailCallback getServerFaileHandler() {
+        if (null == serverFailedHandler) {
+            return serverFailedHandler = new FailCallback() {
+                public void onFail(Object obj) {
+                    if (!(obj instanceof ServerException)) {
+                        return;
+                    }
+                    ((ServerException) obj).printStackTrace();
+                }
+            };
+        }
         return serverFailedHandler;
     }
 
@@ -36,13 +45,10 @@ public class RestfulApi {
         final Deferred deferred = new DeferredObject();
         Promise promise = deferred.promise();
         httpClient.newCall(request).enqueue(new Callback() {
-
-            @Override
             public void onFailure(Request request, IOException e) {
                 deferred.reject(e);
             }
 
-            @Override
             public void onResponse(Response response) throws IOException {
                 if (response.isSuccessful()) {
                     deferred.resolve(response);
@@ -60,15 +66,18 @@ public class RestfulApi {
         });
 
         //System default handle for server error
+        promise.fail(getServerFaileHandler());
+
+        /*
         promise.fail(new FailCallback() {
-            @Override
             public void onFail(Object obj) {
-                if (obj instanceof ServerException) {
-                    ((ServerException) obj).printStackTrace();
+                if (!(obj instanceof ServerException)) {
                     return;
                 }
+                ((ServerException) obj).printStackTrace();
             }
         });
+        */
 
         return promise;
     }

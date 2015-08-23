@@ -1,4 +1,4 @@
-package com.example.execption;
+package com.httpmerge.execption;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -58,7 +58,7 @@ public class RestBaseException extends ReflectiveOperationException implements R
     }
 
     @Override
-    public String getApiErrorMessage(String errorMessage) {
+    public String getApiErrorMessage() {
         return apiErrorMessage;
     }
 
@@ -98,8 +98,8 @@ public class RestBaseException extends ReflectiveOperationException implements R
 
         try {
             String body = response.body().string();
-            RestErrorMessage errorMessage = gson.fromJson(body, RestErrorMessage.class);
-            RestErrorMessage.ErrorsEntity error = errorMessage.getErrors().get(0);
+            com.httpmerge.execption.RestErrorMessage errorMessage = gson.fromJson(body, com.httpmerge.execption.RestErrorMessage.class);
+            com.httpmerge.execption.RestErrorMessage.ErrorsEntity error = errorMessage.getErrors().get(0);
             apiErrorMessage = error.getMessage();
             apiReadableErrorMessage = error.getMessageHuman();
         } catch (JsonSyntaxException e) {

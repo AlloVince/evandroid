@@ -1,7 +1,6 @@
-package com.example;
+package com.httpmerge;
 
-import com.example.execption.ClientInputException;
-import com.example.execption.ServerException;
+import com.httpmerge.execption.ClientInputException;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Headers;
@@ -11,16 +10,12 @@ import com.squareup.okhttp.Response;
 
 import org.jdeferred.Deferred;
 import org.jdeferred.DoneCallback;
-import org.jdeferred.DonePipe;
 import org.jdeferred.FailCallback;
 import org.jdeferred.Promise;
 import org.jdeferred.impl.DefaultDeferredManager;
 import org.jdeferred.impl.DeferredObject;
-import org.jdeferred.multiple.MultipleResults;
-import org.jdeferred.multiple.OneReject;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 
 public class ApiDemo {
@@ -102,9 +97,9 @@ public class ApiDemo {
     */
 
     public static void main(String[] args) {
-        RestfulApi.promiseApiCall(
+
+        RestfulClient.promiseApiCall(
                 "http://api.wallstreetcn.com/v2/users/me"
-                //"http://pay.wallstreetcn.com/"
         ).done(new DoneCallback() {
             @Override
             public void onDone(Object result) {
@@ -117,7 +112,7 @@ public class ApiDemo {
                     return;
                 }
                 ClientInputException exception = (ClientInputException) obj;
-                exception.printStackTrace();
+                System.out.println(exception);
             }
         });
 
@@ -179,7 +174,6 @@ public class ApiDemo {
             }
         });
         */
-
 
         //Pipe example
         /*

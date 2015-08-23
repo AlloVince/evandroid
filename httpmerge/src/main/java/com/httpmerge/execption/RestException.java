@@ -1,4 +1,4 @@
-package com.example.execption;
+package com.httpmerge.execption;
 
 import com.squareup.okhttp.Response;
 
@@ -22,7 +22,7 @@ public interface RestException {
 
     public void setApiErrorMessage(String errorMessage);
 
-    public String getApiErrorMessage(String errorMessage);
+    public String getApiErrorMessage();
 
     public void setApiReadableErrorMessage(String errorMessage);
 

@@ -1,4 +1,4 @@
-package com.example;
+package com.httpmerge;
 
 import static org.junit.Assert.*;
 

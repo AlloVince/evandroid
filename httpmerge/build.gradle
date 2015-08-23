@@ -8,10 +8,10 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.+'              // https://github.com/google/gson
     compile 'org.jdeferred:jdeferred-android-aar:1.2.+'    // https://github.com/jdeferred/jdeferred
     //compile 'log4j:log4j:1.2.17'
-    compile 'org.slf4j:slf4j-site:1.7.12'
+    //compile 'org.slf4j:slf4j-site:1.7.12'
 
-    //compile 'com.loopj.android:android-async-http:1.4.8'   // http://loopj.com/android-async-http/
-    //testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.9.+'
+    testCompile 'com.squareup.okhttp:mockwebserver:2.4+'
     testCompile 'org.robolectric:robolectric:3.0'
 }

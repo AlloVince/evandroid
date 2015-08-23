@@ -1,12 +1,6 @@
-package com.example.execption;
+package com.httpmerge.execption;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.squareup.okhttp.Response;
-
-import java.io.IOException;
-import java.lang.reflect.AnnotatedParameterizedType;
-import java.util.RandomAccess;
 
 /**
  * Created by allovince on 15/8/17.
