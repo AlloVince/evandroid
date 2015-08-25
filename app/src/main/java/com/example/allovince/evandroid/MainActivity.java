@@ -1,27 +1,36 @@
 package com.example.allovince.evandroid;
 
+import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.example.allovince.evandroid.databinding.FragmentMainBinding;
+import com.google.gson.Gson;
 import com.squareup.okhttp.Response;
 
 import org.jdeferred.DoneCallback;
 import org.jdeferred.FailCallback;
 
-import java.io.IOException;
-
+import resthttp.Policy;
 import resthttp.RestfulClient;
 import resthttp.execption.ClientInputException;
 
+import android.databinding.DataBindingUtil;
+
+import com.example.allovince.evandroid.*;
+
 public class MainActivity extends AppCompatActivity {
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final FragmentMainBinding binding = DataBindingUtil.setContentView(this, R.layout.fragment_main);
 
         //Log.w("avnpc", RestfulClient.test());
         RestfulClient.promiseApiCall(
@@ -29,9 +38,12 @@ public class MainActivity extends AppCompatActivity {
         ).done(new DoneCallback() {
             public void onDone(Object result) {
                 Response response = (Response) result;
+                Gson gson = new Gson();
                 try {
-                    Log.w("avnpc", response.body().string());
-                } catch (IOException e) {
+                    final Policy policy = gson.fromJson(response.body().string(), Policy.class);
+                    //Log.w("avnpc", policy.getContent());
+                    binding.setPolicy(policy);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
