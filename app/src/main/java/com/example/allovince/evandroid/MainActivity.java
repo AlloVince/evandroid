@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.example.allovince.evandroid.databinding.FragmentMainBinding;
 import com.google.gson.Gson;
@@ -21,10 +20,7 @@ import resthttp.execption.ClientInputException;
 
 import android.databinding.DataBindingUtil;
 
-import com.example.allovince.evandroid.*;
-
 public class MainActivity extends AppCompatActivity {
-    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
