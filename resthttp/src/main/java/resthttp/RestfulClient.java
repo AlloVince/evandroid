@@ -12,28 +12,40 @@ import org.jdeferred.Promise;
 import org.jdeferred.impl.DeferredObject;
 
 import java.io.IOException;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+
+import com.facebook.stetho.okhttp.StethoInterceptor;
 
 import resthttp.execption.ClientInputException;
 import resthttp.execption.ServerException;
 
-/**
- * Created by allovince on 15/8/17.
- */
 public class RestfulClient {
-    private static OkHttpClient httpClient = new OkHttpClient();
+    private static OkHttpClient httpClient;
 
-    private static FailCallback serverFailedHandler = null;
+    private static FailCallback<Object> serverFailedHandler;
 
-    public static String test() {
-        return "world";
+    public static OkHttpClient getInstance() {
+        if (null == httpClient) {
+            httpClient = new OkHttpClient();
+            httpClient.networkInterceptors().add(new StethoInterceptor());
+
+            CookieManager cookieManager = new CookieManager();
+            cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+            CookieHandler.setDefault(cookieManager);
+            httpClient.setCookieHandler(cookieManager);
+        }
+        return httpClient;
     }
-    public static void registerServerFailedHandler(FailCallback handler) {
+
+    public static void registerServerFailedHandler(FailCallback<Object> handler) {
         serverFailedHandler = handler;
     }
 
-    public static FailCallback getServerFaileHandler() {
+    public static FailCallback<Object> getServerFailedHandler() {
         if (null == serverFailedHandler) {
-            return serverFailedHandler = new FailCallback() {
+            return serverFailedHandler = new FailCallback<Object>() {
                 public void onFail(Object obj) {
                     if (!(obj instanceof ServerException)) {
                         return;
@@ -45,10 +57,10 @@ public class RestfulClient {
         return serverFailedHandler;
     }
 
-    private static Promise callByRequest(final Request request) {
-        final Deferred deferred = new DeferredObject();
-        Promise promise = deferred.promise();
-        httpClient.newCall(request).enqueue(new Callback() {
+    private static Promise<Response, Object, Void> callByRequest(final Request request) {
+        final Deferred<Response, Object, Void> deferred = new DeferredObject<>();
+        Promise<Response, Object, Void> promise = deferred.promise();
+        getInstance().newCall(request).enqueue(new Callback() {
             public void onFailure(Request request, IOException e) {
                 deferred.reject(e);
             }
@@ -70,30 +82,19 @@ public class RestfulClient {
         });
 
         //System default handle for server error
-        promise.fail(getServerFaileHandler());
-
-        /*
-        promise.fail(new FailCallback() {
-            public void onFail(Object obj) {
-                if (!(obj instanceof ServerException)) {
-                    return;
-                }
-                ((ServerException) obj).printStackTrace();
-            }
-        });
-        */
+        promise.fail(getServerFailedHandler());
 
         return promise;
     }
 
-    public static Promise promiseApiCall(String url) {
+    public static Promise<Response, Object, Void> promiseApiCall(String url) {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
         return callByRequest(request);
     }
 
-    public static Promise promiseApiCall(String method, String url, RequestBody body) {
+    public static Promise<Response, Object, Void> promiseApiCall(String method, String url, RequestBody body) {
         Request.Builder request = new Request.Builder();
 
         method = method.toUpperCase();
@@ -111,7 +112,7 @@ public class RestfulClient {
         return callByRequest(request.build());
     }
 
-    public static Promise promiseApiCall(final Request request) {
+    public static Promise<Response, Object, Void>  promiseApiCall(final Request request) {
         return callByRequest(request);
     }
 }
