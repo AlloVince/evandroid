@@ -26,5 +26,52 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="109dp" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Click Me"
+            android:id="@+id/btn_loading"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/image_first"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Staggered"
+            android:id="@+id/btn_sgv"
+            android:layout_below="@+id/btn_sgv_empty_view"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Frag"
+            android:id="@+id/btn_sgv_fragment"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Empty"
+            android:id="@+id/btn_sgv_empty_view"
+            android:layout_below="@+id/btn_sgv_fragment"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="List"
+            android:id="@+id/btn_listview"
+            android:layout_below="@+id/btn_sgv"
+            android:layout_alignParentStart="true" />
+
     </RelativeLayout>
 </layout>

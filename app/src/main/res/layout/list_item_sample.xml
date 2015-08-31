@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/panel_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal">
+
+    <com.etsy.android.grid.util.DynamicHeightTextView
+        android:id="@+id/list_item_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom" />
+
+    <Button
+        android:id="@+id/list_item_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:text="Go" />
+
+    <ImageView
+        android:id="@+id/list_item_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+</FrameLayout>

@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.allovince.evandroid" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -18,6 +18,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".StaggeredGridActivity" />
+        <activity android:name=".StaggeredGridActivityFragment" />
+        <activity android:name=".StaggeredGridEmptyViewActivity" />
+        <activity android:name=".ListViewActivity" />
+        <activity
+            android:name=".RecyActivity"
+            android:label="@string/title_activity_recy" >
         </activity>
     </application>
 
