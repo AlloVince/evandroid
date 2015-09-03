@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">AndroidStaggeredGridSample</string>
+    <string name="app_name">Rio</string>
     <string name="action_settings">action_settings</string>
-    <string name="title_activity_recy">RecyActivity</string>
-    <string name="hello_world">Hello world!</string>
-
+    <string name="title_activity_recy">List</string>
 </resources>
