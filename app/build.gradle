@@ -57,7 +57,6 @@ dependencies {
     compile 'org.jdeferred:jdeferred-android-aar:1.2.+'
     // https://github.com/jdeferred/jdeferred
 
-    compile 'com.marshalchen.ultimaterecyclerview:library:0.3.+'
     compile 'jp.wasabeef:recyclerview-animators:1.2.+'
     compile 'in.srain.cube:ultra-ptr:1.0.+'
 

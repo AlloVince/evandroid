@@ -25,6 +25,8 @@
                 android:layout_alignParentTop="true"
                 android:adjustViewBounds="true"
                 android:scaleType="fitStart"
+                android:minHeight="150dp"
+                android:background="@color/grey"
                 />
 
             <TextView
@@ -38,6 +40,16 @@
                 android:padding="5dp"
                 android:textColor="#ffffff"
                 android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/news_favor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_headset"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@null"
+                />
         </RelativeLayout>
 
         <TextView

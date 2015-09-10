@@ -2,6 +2,7 @@ package com.evandroid.rio.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.support.v7.widget.RecyclerView.Adapter;
 
 import com.evandroid.rio.R;
 import com.evandroid.rio.model.Posts;
@@ -34,6 +36,12 @@ import java.util.List;
 import com.evandroid.httprest.RestfulClient;
 import com.evandroid.httprest.execption.ClientInputException;
 
+import jp.wasabeef.recyclerview.animators.FadeInAnimator;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
+import jp.wasabeef.recyclerview.animators.ScaleInAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
+import jp.wasabeef.recyclerview.animators.adapters.AlphaInAnimationAdapter;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -44,9 +52,11 @@ public class RecyActivityFragment extends Fragment {
     public static final String LAYOUT_STYLE_STAGGERED = "Staggered";
 
     RecyclerView recyclerView;
-    RecyAdapter adapter;
+    SwipeRefreshLayout swipeRefreshLayout;
+    AlphaInAnimationAdapter adapter;
     ArrayList<String> images;
     ArrayList<String> titles;
+    Integer pageNumber = 1;
 
     public RecyActivityFragment() {
         images = new ArrayList<>();
@@ -86,30 +96,49 @@ public class RecyActivityFragment extends Fragment {
         final ArrayList<String> titles = intent.getStringArrayListExtra("titles");
         */
 
-        adapter = new RecyAdapter();
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        adapter = new AlphaInAnimationAdapter(new RecyAdapter());
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view2);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        //recyclerView.setItemAnimator(new DefaultItemAnimator());
+        //recyclerView.setItemAnimator(new LandingAnimator());
+        //recyclerView.setItemAnimator(new FadeInAnimator());
+        recyclerView.setItemAnimator(new SlideInLeftAnimator());
+
         recyclerView.setAdapter(adapter);
 
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh2);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            public void onRefresh() {
+                pageNumber++;
+                callApi();
+            }
+        });
+
+        callApi();
+
+        return view;
+    }
+
+    private void callApi() {
         RestfulClient.promiseApiCall(
+                getDoubanUrl(pageNumber)
                 //"http://api.wallstreetcn.com/v2/posts"
-                "http://movie.douban.com/top250"
                 //"http://www.javhip.com/cn/released/currentPage/1"
         ).done(new DoneCallback<Response>() {
             public void onDone(Response response) {
-                //getWscnAdapter(response);
-                getDoubanAdapter(response);
-//                getDmmAdapter(response);
+                updateDoubanAdapter(response);
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
                         adapter.notifyDataSetChanged();
                     }
                 });
             }
         }).fail(new FailCallback<Object>() {
             public void onFail(Object obj) {
+                pageNumber--;
+                swipeRefreshLayout.setRefreshing(false);
                 Log.w("avnpc", (String) obj);
                 if (!(obj instanceof ClientInputException)) {
                     return;
@@ -118,10 +147,14 @@ public class RecyActivityFragment extends Fragment {
                 Log.w("avnpc", exception.toString());
             }
         });
-        return view;
     }
 
-    private void getDmmAdapter(Response response) {
+    private String getDoubanUrl(int page) {
+        page = page > 0 ? page - 1 : 0;
+        return String.format("http://movie.douban.com/top250?start=%d", page * 25);
+    }
+
+    private void updateDmmAdapter(Response response) {
         String html = null;
         try {
             html = response.body().string();
@@ -135,10 +168,12 @@ public class RecyActivityFragment extends Fragment {
             images.add(item.select("img").attr("src"));
             titles.add(item.select("img").attr("title"));
         }
-        adapter.setData(titles, images);
+
+        Adapter wrappedAdapter = adapter.getWrappedAdapter();
+        //((RecyAdapter) wrappedAdapter).setData(titles, images);
     }
 
-    private void getDoubanAdapter(Response response) {
+    private void updateDoubanAdapter(Response response) {
         try {
             String html = response.body().string();
             Document doc = Jsoup.parse(html);
@@ -150,10 +185,12 @@ public class RecyActivityFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        adapter.setData(titles, images);
+        Adapter wrappedAdapter = adapter.getWrappedAdapter();
+        //((RecyAdapter) wrappedAdapter).setData(titles, images);
+//        adapter.setData(titles, images);
     }
 
-    private void getWscnAdapter(Response response) {
+    private void updateWscnAdapter(Response response) {
         Gson gson = new Gson();
         String body = null;
         Posts posts = null;
@@ -177,6 +214,8 @@ public class RecyActivityFragment extends Fragment {
                 images.add(url);
             }
         }
-        adapter.setData(titles, images);
+        Adapter wrappedAdapter = adapter.getWrappedAdapter();
+        //((RecyAdapter) wrappedAdapter).setData(titles, images);
+//        adapter.setData(titles, images);
     }
 }

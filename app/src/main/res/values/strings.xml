@@ -3,4 +3,5 @@
     <string name="app_name">Rio</string>
     <string name="action_settings">action_settings</string>
     <string name="title_activity_recy">List</string>
+    <string name="menu_settings">Settings</string>
 </resources>
