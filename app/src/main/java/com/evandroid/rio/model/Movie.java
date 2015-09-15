@@ -8,6 +8,8 @@ import java.util.List;
  * Created by allovince on 15/9/9.
  */
 public class Movie {
+    private Integer fill_color;
+
     @Override
     public String toString() {
         return "Movie{" +
@@ -60,7 +62,6 @@ public class Movie {
      * aka : ["9：末世决战","九","Number 9","机器人9号"]
      */
 
-    private Integer fill_color;
     private RatingEntity rating;
     private int reviews_count;
     private int wish_count;

@@ -1,6 +1,7 @@
 package com.evandroid.rio.ui;
 
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -44,7 +45,10 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import jp.wasabeef.recyclerview.animators.ScaleInAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import jp.wasabeef.recyclerview.animators.adapters.AlphaInAnimationAdapter;
 
@@ -63,11 +67,14 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
-    AlphaInAnimationAdapter adapter;
+    //AlphaInAnimationAdapter adapter;
+    RecyAdapter adapter;
     Integer pageNumber = 1;
     Integer direction = UPDATE_DIRECTION_NO_PULL;
     public static int[] colors;
     private static int VIEW_COLUMNS = 2;
+    private static int PER_PAGE = 25;
+    private static int MAX_ITEM = 250;
 
     @Override
     protected void onStart() {
@@ -126,18 +133,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        RecyAdapter wrapAdapter = new RecyAdapter();
-        wrapAdapter.setActivity(this);
-        adapter = new AlphaInAnimationAdapter(wrapAdapter);
+        adapter = new RecyAdapter();
+        adapter.addFooter();
+        adapter.addHeader();
+        //RecyAdapter wrapAdapter = new RecyAdapter();
+        //wrapAdapter.setActivity(this);
+        //adapter = new AlphaInAnimationAdapter(wrapAdapter);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(VIEW_COLUMNS, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new SlideInLeftAnimator());
+        recyclerView.setItemAnimator(new ScaleInAnimator());
         recyclerView.setAdapter(adapter);
 
-        recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        /*
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            recyclerView.setOnScrollChangeListener(new RecyclerView.OnScrollChangeListener() {
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int[] pastVisiblesItems = layoutManager.findFirstVisibleItemPositions(null);
+                    Log.v("avnpc", String.format("Scrolling: Visible item count %d; total item count %d; past visible items %s", visibleItemCount, totalItemCount, pastVisiblesItems[VIEW_COLUMNS - 1]));
+                    if ((visibleItemCount + pastVisiblesItems[VIEW_COLUMNS - 1]) >= totalItemCount) {
+                        Log.d("avnpc", String.format("Reached bottom. Visible item count %d; total item count %d; past visible items %s", visibleItemCount, totalItemCount, pastVisiblesItems[VIEW_COLUMNS - 1]));
+                        callApi(UPDATE_DIRECTION_PULL_UP);
+                    }
+                }
+            });
+            return;
+        }
+        */
+
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
                 int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
                 int[] pastVisiblesItems = layoutManager.findFirstVisibleItemPositions(null);
@@ -145,31 +173,54 @@ public class MainActivity extends AppCompatActivity {
                 if ((visibleItemCount + pastVisiblesItems[VIEW_COLUMNS - 1]) >= totalItemCount) {
                     Log.d("avnpc", String.format("Reached bottom. Visible item count %d; total item count %d; past visible items %s", visibleItemCount, totalItemCount, pastVisiblesItems[VIEW_COLUMNS - 1]));
                     callApi(UPDATE_DIRECTION_PULL_UP);
+                    showLoadingMore();
                 }
             }
         });
     }
 
+    private void showLoadingMore() {
+
+    }
+
+    private void hideLoadingMore() {
+
+    }
+
     private void prepareCards(int direction) {
+        if (true == isReachedLastPage()) {
+            return;
+        }
         ArrayList<Movie> movies = new ArrayList<>();
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < PER_PAGE; i++) {
             movies.add(new Movie());
         }
 
         Log.d("avnpc", String.format("Inited movie list, %d dummy movies created, direction: %d", movies.size(), direction));
 
-        RecyclerView.Adapter wrappedAdapter = adapter.getWrappedAdapter();
+        //RecyclerView.Adapter wrappedAdapter = adapter.getWrappedAdapter();
         if (direction > 0) {
-            ((RecyAdapter) wrappedAdapter).appendData(movies);
+            adapter.appendData(movies);
             return;
         } else if (direction < 0) {
-            ((RecyAdapter) wrappedAdapter).prependData(movies);
+            adapter.prependData(movies);
             return;
         }
-        ((RecyAdapter) wrappedAdapter).setData(movies);
+        adapter.setData(movies);
+    }
+
+    private boolean isReachedLastPage() {
+        //TODO: not correct for last page
+        if (pageNumber * PER_PAGE > MAX_ITEM) {
+            return true;
+        }
+        return false;
     }
 
     private void callApi(int direction) {
+        if (true == isReachedLastPage()) {
+            return;
+        }
         if (true == isLoadingMore) {
             Log.d("avnpc", String.format("Scroll event triggered by skipped by is loading"));
             return;
@@ -177,18 +228,20 @@ public class MainActivity extends AppCompatActivity {
         isLoadingMore = true;
         this.direction = direction;
         prepareCards(direction);
-        Log.d("avnpc", String.format("Calling API %s, direction %d, page %d", getDoubanUrl(pageNumber), direction, pageNumber));
+        Log.i("avnpc", String.format("Calling API %s, direction %d, page %d", getDoubanUrl(pageNumber), direction, pageNumber));
         RestfulClient.promiseApiCall(
                 getDoubanUrl(pageNumber)
-                //"http://api.wallstreetcn.com/v2/posts"
-                //"http://www.javhip.com/cn/released/currentPage/1"
+                //getDmmUrl(pageNumber)
         ).done(new DoneCallback<Response>() {
-            public void onDone(Response response) {
+            public void onDone(final Response response) {
                 isLoadingMore = false;
                 pageNumber++;
-                updateDoubanAdapter(response);
+                final int[] range = updateDoubanAdapter(response);
                 runOnUiThread(new Runnable() {
                     public void run() {
+                        notifyRange(range);
+                        //adapter.refreshVisibleViewHolders(recyclerView.getLayoutManager());
+                        Log.d("avnpc", String.format("Called notify on UI Thread"));
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });
@@ -209,38 +262,94 @@ public class MainActivity extends AppCompatActivity {
 
     private String getDoubanUrl(int page) {
         page = page > 0 ? page - 1 : 0;
-        return String.format("http://movie.douban.com/top250?start=%d", page * 25);
+        return String.format("http://movie.douban.com/top250?start=%d", page * PER_PAGE);
     }
 
-    private void updateDoubanAdapter(Response response) {
-        Log.d("avnpc", String.format("Call API %s success", response.request().httpUrl().toString()));
-        ArrayList<Movie> movieList = new ArrayList<>();
+    private void notifyRange(final int[] range) {
+        if (range.length < 2) {
+            return;
+        }
+        runOnUiThread(new Runnable() {
+            public void run() {
+                for(int i = range[0]; i < range[1]; i++) {
+                    adapter.notifyItemChanged(i);
+                }
+            }
+        });
+
+    }
+
+    private int[] updateDoubanAdapter(Response response) {
+        Log.i("avnpc", String.format("Call API %s success", response.request().httpUrl().toString()));
+        final ArrayList<Movie> movieList = new ArrayList<>();
+        int[] changedRange = new int[]{0, 0};
         try {
             String html = response.body().string();
             Document doc = Jsoup.parse(html);
             Elements items = doc.select("ol.grid_view .item");
+            Pattern r = Pattern.compile("(\\d+)");
             for (Element item : items) {
                 Movie movie = new Movie();
+                String link = item.select(".pic a").attr("href");
+                Matcher matcher = r.matcher(link);
+                if (matcher.find()) {
+                    movie.setId(matcher.group(0));
+                }
                 movie.setTitle(item.select("img").attr("alt"));
                 movie.getImages().setMedium(item.select("img").attr("src").replace("/ipst/", "/lpst/"));
                 movieList.add(movie);
             }
             Log.d("avnpc", String.format("Movie list data regenerated, current direction %d, movies %s", direction, movieList.toString()));
-            RecyclerView.Adapter wrappedAdapter = adapter.getWrappedAdapter();
             if (direction == UPDATE_DIRECTION_PULL_UP) {
-                Log.d("avnpc", String.format("Movie list (size %d) updating to adapter position %d", movieList.size(), (pageNumber - 2) * 25));
-                ((RecyAdapter) wrappedAdapter).updateData(movieList, (pageNumber - 2) * 25);
-                return;
+                Log.d("avnpc", String.format("Movie list (size %d) updating to adapter position %d", movieList.size(), (pageNumber - 2) * PER_PAGE));
+                changedRange = adapter.updateData(movieList, (pageNumber - 2) * PER_PAGE);
+            } else {
+                Log.d("avnpc", String.format("Movie list (size %d) updating to adapter position %d", movieList.size(), 0));
+                changedRange = adapter.updateData(movieList, 0);
             }
-            Log.d("avnpc", String.format("Movie list (size %d) updating to adapter position %d", movieList.size(), 0));
-            ((RecyAdapter) wrappedAdapter).updateData(movieList, 0);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return changedRange;
     }
 
+    private String getDmmUrl(int page) {
+        return String.format("http://www.javtag.com/cn/released/currentPage/%d", page);
+    }
+
+    private RecyAdapter updateDmmAdapter(Response response) {
+        Log.d("avnpc", String.format("Call API %s success", response.request().httpUrl().toString()));
+        ArrayList<Movie> movieList = new ArrayList<>();
+        //RecyAdapter wrappedAdapter = (RecyAdapter) (RecyclerView.Adapter) adapter.getWrappedAdapter();
+        try {
+            String html = response.body().string();
+            Document doc = Jsoup.parse(html);
+            Elements items = doc.select(".movie-box");
+            Pattern r = Pattern.compile("(\\d+)");
+            for (Element item : items) {
+                Movie movie = new Movie();
+                //images.add(item.select("img").attr("src").replace("ps.jpg", "pl.jpg"));
+                movie.setTitle(item.select("img").attr("title"));
+                movie.getImages().setMedium(item.select("img").attr("src"));
+                movieList.add(movie);
+            }
+            Log.d("avnpc", String.format("Movie list data regenerated, current direction %d, movies %s", direction, movieList.toString()));
+            if (direction == UPDATE_DIRECTION_PULL_UP) {
+                Log.d("avnpc", String.format("Movie list (size %d) updating to adapter position %d", movieList.size(), (pageNumber - 2) * PER_PAGE));
+                adapter.updateData(movieList, (pageNumber - 2) * PER_PAGE);
+                return adapter;
+            }
+            Log.d("avnpc", String.format("Movie list (size %d) updating to adapter position %d", movieList.size(), 0));
+            adapter.updateData(movieList, 0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return adapter;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
