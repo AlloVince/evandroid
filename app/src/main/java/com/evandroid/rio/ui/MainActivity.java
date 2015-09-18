@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     private void initRecyclerView() {
         adapter = new RecyAdapter();
         adapter.addFooter();
-        adapter.addHeader();
+        //adapter.addHeader();
         //RecyAdapter wrapAdapter = new RecyAdapter();
         //wrapAdapter.setActivity(this);
         //adapter = new AlphaInAnimationAdapter(wrapAdapter);
@@ -236,7 +236,8 @@ public class MainActivity extends AppCompatActivity {
             public void onDone(final Response response) {
                 isLoadingMore = false;
                 pageNumber++;
-                final int[] range = updateDoubanAdapter(response);
+                final int[] range = updateAdapter("douban", response);
+                //final int[] range = updateAdapter("Dmm", response);
                 runOnUiThread(new Runnable() {
                     public void run() {
                         notifyRange(range);
@@ -260,10 +261,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private String getDoubanUrl(int page) {
-        page = page > 0 ? page - 1 : 0;
-        return String.format("http://movie.douban.com/top250?start=%d", page * PER_PAGE);
-    }
 
     private void notifyRange(final int[] range) {
         if (range.length < 2) {
@@ -271,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
         }
         runOnUiThread(new Runnable() {
             public void run() {
-                for(int i = range[0]; i < range[1]; i++) {
+                for (int i = range[0]; i < range[1]; i++) {
                     adapter.notifyItemChanged(i);
                 }
             }
@@ -279,25 +276,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private int[] updateDoubanAdapter(Response response) {
+
+    private int[] updateAdapter(String adapterName, Response response) {
         Log.i("avnpc", String.format("Call API %s success", response.request().httpUrl().toString()));
-        final ArrayList<Movie> movieList = new ArrayList<>();
+        ArrayList<Movie> movieList = new ArrayList<>();
         int[] changedRange = new int[]{0, 0};
         try {
             String html = response.body().string();
             Document doc = Jsoup.parse(html);
-            Elements items = doc.select("ol.grid_view .item");
-            Pattern r = Pattern.compile("(\\d+)");
-            for (Element item : items) {
-                Movie movie = new Movie();
-                String link = item.select(".pic a").attr("href");
-                Matcher matcher = r.matcher(link);
-                if (matcher.find()) {
-                    movie.setId(matcher.group(0));
-                }
-                movie.setTitle(item.select("img").attr("alt"));
-                movie.getImages().setMedium(item.select("img").attr("src").replace("/ipst/", "/lpst/"));
-                movieList.add(movie);
+            if (adapterName.equals("Dmm")) {
+                movieList = parseDmm(movieList, doc);
+            } else {
+                movieList = parseDouban(movieList, doc);
             }
             Log.d("avnpc", String.format("Movie list data regenerated, current direction %d, movies %s", direction, movieList.toString()));
             if (direction == UPDATE_DIRECTION_PULL_UP) {
@@ -315,40 +305,43 @@ public class MainActivity extends AppCompatActivity {
         return changedRange;
     }
 
+    private String getDoubanUrl(int page) {
+        page = page > 0 ? page - 1 : 0;
+        return String.format("http://movie.douban.com/top250?start=%d", page * PER_PAGE);
+    }
+
+    private ArrayList<Movie> parseDouban(ArrayList<Movie> movieList, Document doc) {
+        Elements items = doc.select("ol.grid_view .item");
+        Pattern r = Pattern.compile("(\\d+)");
+        for (Element item : items) {
+            Movie movie = new Movie();
+            String link = item.select(".pic a").attr("href");
+            Matcher matcher = r.matcher(link);
+            if (matcher.find()) {
+                movie.setId(matcher.group(0));
+            }
+            movie.setTitle(item.select("img").attr("alt"));
+            movie.getImages().setMedium(item.select("img").attr("src").replace("/ipst/", "/lpst/"));
+            movieList.add(movie);
+        }
+        return movieList;
+    }
+
     private String getDmmUrl(int page) {
         return String.format("http://www.javtag.com/cn/released/currentPage/%d", page);
     }
 
-    private RecyAdapter updateDmmAdapter(Response response) {
-        Log.d("avnpc", String.format("Call API %s success", response.request().httpUrl().toString()));
-        ArrayList<Movie> movieList = new ArrayList<>();
-        //RecyAdapter wrappedAdapter = (RecyAdapter) (RecyclerView.Adapter) adapter.getWrappedAdapter();
-        try {
-            String html = response.body().string();
-            Document doc = Jsoup.parse(html);
-            Elements items = doc.select(".movie-box");
-            Pattern r = Pattern.compile("(\\d+)");
-            for (Element item : items) {
-                Movie movie = new Movie();
-                //images.add(item.select("img").attr("src").replace("ps.jpg", "pl.jpg"));
-                movie.setTitle(item.select("img").attr("title"));
-                movie.getImages().setMedium(item.select("img").attr("src"));
-                movieList.add(movie);
-            }
-            Log.d("avnpc", String.format("Movie list data regenerated, current direction %d, movies %s", direction, movieList.toString()));
-            if (direction == UPDATE_DIRECTION_PULL_UP) {
-                Log.d("avnpc", String.format("Movie list (size %d) updating to adapter position %d", movieList.size(), (pageNumber - 2) * PER_PAGE));
-                adapter.updateData(movieList, (pageNumber - 2) * PER_PAGE);
-                return adapter;
-            }
-            Log.d("avnpc", String.format("Movie list (size %d) updating to adapter position %d", movieList.size(), 0));
-            adapter.updateData(movieList, 0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+    private ArrayList<Movie> parseDmm(ArrayList<Movie> movieList, Document doc) {
+        Elements items = doc.select(".movie-box");
+        Pattern r = Pattern.compile("(\\d+)");
+        for (Element item : items) {
+            Movie movie = new Movie();
+            //images.add(item.select("img").attr("src").replace("ps.jpg", "pl.jpg"));
+            movie.setTitle(item.select("img").attr("title"));
+            movie.getImages().setMedium(item.select("img").attr("src"));
+            movieList.add(movie);
         }
-        return adapter;
+        return movieList;
     }
 
     @Override
