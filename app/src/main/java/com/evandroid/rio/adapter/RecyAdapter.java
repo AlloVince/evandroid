@@ -1,21 +1,20 @@
 package com.evandroid.rio.adapter;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.evandroid.rio.R;
 import com.evandroid.rio.model.Movie;
-import com.evandroid.rio.ui.MainActivity;
+import com.evandroid.rio.ui.MovieDetailActivity;
 import com.evandroid.rio.util.ImageLoader;
+import com.joanzapata.iconify.widget.IconTextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -43,6 +42,13 @@ public class RecyAdapter extends RecyclerView.Adapter<RecyAdapter.ViewHolder> {
         if (footer.size() < 1) {
             footer.add(new Object());
         }
+    }
+
+    public int[] removeFooter() {
+        int footerSize = footer.size();
+        int listSize = header.size() + movies.size();
+        footer = new ArrayList<>();
+        return new int[]{listSize, listSize + footerSize};
     }
 
     public int[] setData(ArrayList<Movie> m) {
@@ -75,6 +81,10 @@ public class RecyAdapter extends RecyclerView.Adapter<RecyAdapter.ViewHolder> {
         return new int[]{position, end};
     }
 
+    public Movie getData(int position) {
+        return movies.get(position);
+    }
+
     public RecyAdapter(ArrayList<Movie> m) {
         movies = m;
     }
@@ -86,20 +96,20 @@ public class RecyAdapter extends RecyclerView.Adapter<RecyAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         imgLoader = ImageLoader.getInstance(parent.getContext());
         if (viewType == ITEM_TYPE_HEADER) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recy_item_loading, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_list_recycler_view_footer, parent, false);
             ViewHolder viewHolder = new ViewHolder(view, viewType);
             Log.v("avnpc", String.format("Created view holder as header by type(%d) %s", viewType, viewHolder.toString()));
             return viewHolder;
         }
 
         if (viewType == ITEM_TYPE_FOOTER) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recy_item_loading, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_list_recycler_view_footer, parent, false);
             ViewHolder viewHolder = new ViewHolder(view, viewType);
             Log.v("avnpc", String.format("Created view holder as footer by type(%d) %s", viewType, viewHolder.toString()));
             return viewHolder;
         }
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recy_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_list_recycler_view_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view, viewType);
         Log.v("avnpc", String.format("Created view holder by type(%d) %s", viewType, viewHolder.toString()));
         return viewHolder;
@@ -110,10 +120,42 @@ public class RecyAdapter extends RecyclerView.Adapter<RecyAdapter.ViewHolder> {
     }
 
     public void onBindFooterViewHolder(ViewHolder holder, int position) {
+        //TODO: Support all kinds of layout manager
+        StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+        layoutParams.setFullSpan(true);
         return;
     }
 
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    /*
+    public static final class PaletteTransformation implements Transformation {
+        private static final PaletteTransformation INSTANCE = new PaletteTransformation();
+        private static final Map<Bitmap, Palette> CACHE = new WeakHashMap<>();
+
+        public static PaletteTransformation instance() {
+            return INSTANCE;
+        }
+
+        public static Palette getPalette(Bitmap bitmap) {
+            return CACHE.get(bitmap);
+        }
+
+        private PaletteTransformation() {}
+
+        @Override public Bitmap transform(Bitmap source) {
+            Palette palette = Palette.generate(source);
+            CACHE.put(source, palette);
+            return source;
+        }
+
+        @Override
+        public String key() {
+            return "";
+        }
+    }
+    */
+
+
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         if (isHeader(position)) {
             onBindHeaderViewHolder(holder, position);
             return;
@@ -134,6 +176,22 @@ public class RecyAdapter extends RecyclerView.Adapter<RecyAdapter.ViewHolder> {
         if (!("".equals(imageUrl))) {
             Log.d("avnpc", imageUrl);
             imgLoader.load(imageUrl).into(holder.imageView);
+            /*
+            imgLoader.load(imageUrl)
+                    //.transform(PaletteTransformation.instance())
+                    .into(holder.imageView, new Callback() {
+                public void onSuccess() {
+                    Bitmap bitmap = ((BitmapDrawable) holder.imageView.getDrawable()).getBitmap(); // Ew!
+                    //Palette palette = PaletteTransformation.getPalette(bitmap);
+                    Palette palette = Palette.generate(bitmap);
+                    holder.imageButton.setTextColor(palette.getLightVibrantColor(0xFFFFFF));
+                    holder.imageButton.setShadowLayer(2, 4, 4, palette.getDarkMutedColor(0x000000));
+                }
+
+                public void onError() {
+                }
+            });
+            */
         }
     }
 
@@ -175,12 +233,11 @@ public class RecyAdapter extends RecyclerView.Adapter<RecyAdapter.ViewHolder> {
     }
 
 
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView textView;
         public ImageView imageView;
-        public ImageButton imageButton;
+        public IconTextView imageButton;
         public Movie movie;
 
         public ViewHolder(View itemView, int viewType) {
@@ -190,8 +247,18 @@ public class RecyAdapter extends RecyclerView.Adapter<RecyAdapter.ViewHolder> {
             }
             textView = (TextView) itemView.findViewById(R.id.news_desc);
             imageView = (ImageView) itemView.findViewById(R.id.news_photo);
-            imageButton = (ImageButton) itemView.findViewById(R.id.news_favor);
 
+            imageView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    Intent intent = new Intent(v.getContext().getApplicationContext(), MovieDetailActivity.class);
+                    intent.putExtra("DataPosition", position);
+                    Log.d("avnpc", String.format("Passed position %d to detail activity", position));
+                    v.getContext().startActivity(intent);
+                }
+            });
+            /*
+            imageButton = (IconTextView) itemView.findViewById(R.id.news_favor);
             imageButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     int position = getAdapterPosition();
@@ -202,6 +269,7 @@ public class RecyAdapter extends RecyclerView.Adapter<RecyAdapter.ViewHolder> {
                     ).show();
                 }
             });
+            */
         }
     }
 }

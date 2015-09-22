@@ -1,6 +1,6 @@
 package com.evandroid.rio.model;
 
-import com.evandroid.rio.ui.MainActivity;
+import com.evandroid.rio.ui.MovieListActivity;
 
 import java.util.List;
 
@@ -24,8 +24,8 @@ public class Movie {
         if (null != fill_color) {
             return fill_color;
         }
-        int[] colors = MainActivity.colors;
-        int colorIndex = ((int) (Math.random() * 100)) % 4;
+        int[] colors = MovieListActivity.colors;
+        int colorIndex = ((int) (Math.random() * 100)) % colors.length;
         return fill_color = colors[colorIndex];
     }
 

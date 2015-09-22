@@ -1,6 +1,7 @@
 package com.evandroid.rio.ui;
 
 
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -55,7 +56,7 @@ import jp.wasabeef.recyclerview.animators.adapters.AlphaInAnimationAdapter;
 /**
  * TODO
  */
-public class MainActivity extends AppCompatActivity {
+public class MovieListActivity extends AppCompatActivity {
 
     private static int UPDATE_DIRECTION_PULL_DOWN = -1;
     private static int UPDATE_DIRECTION_PULL_UP = 1;
@@ -79,8 +80,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        //Reset page number
-        pageNumber = 1;
     }
 
     @Override
@@ -88,11 +87,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Reset page number
+        pageNumber = 1;
+
         colors = new int[]{
-                ContextCompat.getColor(this, R.color.blue),
-                ContextCompat.getColor(this, R.color.orange),
-                ContextCompat.getColor(this, R.color.yellow),
-                ContextCompat.getColor(this, R.color.green),
+                ContextCompat.getColor(this, R.color.image_random_fill_1),
+                ContextCompat.getColor(this, R.color.image_random_fill_2),
+                ContextCompat.getColor(this, R.color.image_random_fill_3),
+                ContextCompat.getColor(this, R.color.image_random_fill_4),
+                ContextCompat.getColor(this, R.color.image_random_fill_5),
+                ContextCompat.getColor(this, R.color.image_random_fill_6),
+                ContextCompat.getColor(this, R.color.image_random_fill_7),
+                ContextCompat.getColor(this, R.color.image_random_fill_8),
+                ContextCompat.getColor(this, R.color.image_random_fill_9),
+                ContextCompat.getColor(this, R.color.image_random_fill_10),
         };
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -145,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new ScaleInAnimator());
         recyclerView.setAdapter(adapter);
 
+        //recyclerView.addItemDecoration(new SpacesItemDecoration(50));
+
         /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             recyclerView.setOnScrollChangeListener(new RecyclerView.OnScrollChangeListener() {
@@ -173,19 +183,32 @@ public class MainActivity extends AppCompatActivity {
                 if ((visibleItemCount + pastVisiblesItems[VIEW_COLUMNS - 1]) >= totalItemCount) {
                     Log.d("avnpc", String.format("Reached bottom. Visible item count %d; total item count %d; past visible items %s", visibleItemCount, totalItemCount, pastVisiblesItems[VIEW_COLUMNS - 1]));
                     callApi(UPDATE_DIRECTION_PULL_UP);
-                    showLoadingMore();
                 }
             }
         });
     }
 
-    private void showLoadingMore() {
+    /*
+    private class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+        private int space;
 
+        public SpacesItemDecoration(int space) {
+            this.space = space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view,
+                                   RecyclerView parent, RecyclerView.State state) {
+            outRect.left = space;
+            outRect.right = space;
+            outRect.bottom = space;
+
+            // Add top margin only for the first item to avoid double space between items
+            if(parent.getChildLayoutPosition(view) == 0)
+                outRect.top = space;
+        }
     }
-
-    private void hideLoadingMore() {
-
-    }
+    */
 
     private void prepareCards(int direction) {
         if (true == isReachedLastPage()) {
@@ -217,8 +240,13 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    private void hideFooter() {
+        notifyRangeRemoved(adapter.removeFooter());
+    }
+
     private void callApi(int direction) {
         if (true == isReachedLastPage()) {
+            hideFooter();
             return;
         }
         if (true == isLoadingMore) {
@@ -240,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
                 //final int[] range = updateAdapter("Dmm", response);
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        notifyRange(range);
+                        notifyRangeChanged(range);
                         //adapter.refreshVisibleViewHolders(recyclerView.getLayoutManager());
                         Log.d("avnpc", String.format("Called notify on UI Thread"));
                         swipeRefreshLayout.setRefreshing(false);
@@ -262,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void notifyRange(final int[] range) {
+    private void notifyRangeChanged(final int[] range) {
         if (range.length < 2) {
             return;
         }
@@ -273,9 +301,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
+    private void notifyRangeRemoved(final int[] range) {
+        if (range.length < 2) {
+            return;
+        }
+        runOnUiThread(new Runnable() {
+            public void run() {
+                for (int i = range[0]; i < range[1]; i++) {
+                    adapter.notifyItemRemoved(i);
+                }
+            }
+        });
+    }
 
     private int[] updateAdapter(String adapterName, Response response) {
         Log.i("avnpc", String.format("Call API %s success", response.request().httpUrl().toString()));
@@ -346,7 +385,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.sample_actions, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 

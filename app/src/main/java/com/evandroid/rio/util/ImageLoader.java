@@ -18,7 +18,7 @@ public class ImageLoader {
             //NOTE: Picasso require context to enable disk cache
             picasso = new Picasso.Builder(context).downloader(downloader).build();
             picasso.setLoggingEnabled(true);
-            picasso.setIndicatorsEnabled(true);
+            //picasso.setIndicatorsEnabled(true);
             Picasso.setSingletonInstance(picasso);
         }
         return picasso;

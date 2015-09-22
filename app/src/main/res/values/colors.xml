@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--
     <color name="primary">#3F51B5</color>
     <color name="primary_dark">#303F9F</color>
     <color name="accent">#FF4081</color>
+    -->
+    <!--
+    <color name="primary">#795548</color>
+    <color name="primary_dark">#3e2723</color>
+    <color name="accent">#607d8b</color>
+    -->
+    <color name="primary">#607d8b</color>
+    <color name="primary_dark">#263238</color>
+    <color name="accent">#795548</color>
     <color name="orange">#ffffdc7e</color>
     <color name="grey">#ffd3d3d3</color>
     <color name="green">#ff8dd304</color>
     <color name="blue">#ff82e0ff</color>
     <color name="yellow">#fffffbae</color>
     <color name="red">#fff10800</color>
+    <color name="white">#ffffffff</color>
     <color name="list_item_pressed">#1A000000</color>
+    <color name="image_random_fill_1">#7e7163</color>
+    <color name="image_random_fill_2">#6f686a</color>
+    <color name="image_random_fill_3">#3b3835</color>
+    <color name="image_random_fill_4">#797260</color>
+    <color name="image_random_fill_5">#b7aaaf</color>
+    <color name="image_random_fill_6">#bc8497</color>
+    <color name="image_random_fill_7">#d0dbdb</color>
+    <color name="image_random_fill_8">#b6b9bc</color>
+    <color name="image_random_fill_9">#a49e9a</color>
+    <color name="image_random_fill_10">#a39391</color>
+    <color name="bg_color">#DADADA</color>
 </resources>
