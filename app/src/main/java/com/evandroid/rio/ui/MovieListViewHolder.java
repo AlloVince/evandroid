@@ -35,7 +35,8 @@ public class MovieListViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View v) {
                 int position = getAdapterPosition();
                 Intent intent = new Intent(v.getContext().getApplicationContext(), MovieDetailActivity.class);
-                intent.putExtra("DataPosition", position);
+                intent.putExtra("ViewPosition", position);
+                intent.putExtra("MovieId", movie.getId());
                 Log.d("avnpc", String.format("Passed position %d to detail activity", position));
                 v.getContext().startActivity(intent);
             }

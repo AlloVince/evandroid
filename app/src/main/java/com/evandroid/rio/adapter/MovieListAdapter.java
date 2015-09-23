@@ -1,6 +1,5 @@
 package com.evandroid.rio.adapter;
 
-import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,11 +18,11 @@ import java.util.ArrayList;
 /**
  * Created by allovince on 15/9/23.
  */
-public class MovieListAdapter extends RecyclerViewBaseAdapter<MovieListViewHolder> {
+public class MovieListAdapter extends RecyclerViewBaseAdapter<MovieListViewHolder, Movie> {
     private Picasso imgLoader;
 
     public MovieListAdapter(ArrayList<Movie> m) {
-        setData(m);
+        setItems(m);
     }
 
     public MovieListAdapter() {

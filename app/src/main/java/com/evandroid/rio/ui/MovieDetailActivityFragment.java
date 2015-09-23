@@ -57,9 +57,10 @@ public class MovieDetailActivityFragment extends Fragment {
         });
 
         Intent intent = getActivity().getIntent();
-        int movieId = intent.getIntExtra("DataPosition", 25774051);
+        String movieId = intent.getStringExtra("MovieId");
+        movieId = "".equals(movieId) ? "25774051" : movieId;
         RestfulClient.promiseApiCall(
-                "https://api.douban.com/v2/movie/subject/" + String.valueOf(movieId)
+                "https://api.douban.com/v2/movie/subject/" + movieId
         ).done(new DoneCallback<Response>() {
             public void onDone(Response response) {
                 Gson gson = new Gson();

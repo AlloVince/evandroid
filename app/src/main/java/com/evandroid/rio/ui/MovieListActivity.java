@@ -20,7 +20,6 @@ import com.evandroid.httprest.RestfulClient;
 import com.evandroid.httprest.execption.ClientInputException;
 import com.evandroid.rio.R;
 import com.evandroid.rio.adapter.MovieListAdapter;
-import com.evandroid.rio.adapter.RecyclerViewBaseAdapter;
 import com.evandroid.rio.model.Movie;
 import com.squareup.okhttp.Response;
 
@@ -208,13 +207,13 @@ public class MovieListActivity extends AppCompatActivity {
 
         //RecyclerView.Adapter wrappedAdapter = adapter.getWrappedAdapter();
         if (direction > 0) {
-            adapter.appendData(movies);
+            adapter.appendItems(movies);
             return;
         } else if (direction < 0) {
-            adapter.prependData(movies);
+            adapter.prependItems(movies);
             return;
         }
-        adapter.setData(movies);
+        adapter.setItems(movies);
     }
 
     private boolean isReachedLastPage() {
@@ -316,10 +315,10 @@ public class MovieListActivity extends AppCompatActivity {
             Log.d("avnpc", String.format("Movie list data regenerated, current direction %d, movies %s", direction, movieList.toString()));
             if (direction == UPDATE_DIRECTION_PULL_UP) {
                 Log.d("avnpc", String.format("Movie list (size %d) updating to adapter position %d", movieList.size(), (pageNumber - 2) * PER_PAGE));
-                changedRange = adapter.updateData(movieList, (pageNumber - 2) * PER_PAGE);
+                changedRange = adapter.updateItems(movieList, (pageNumber - 2) * PER_PAGE);
             } else {
                 Log.d("avnpc", String.format("Movie list (size %d) updating to adapter position %d", movieList.size(), 0));
-                changedRange = adapter.updateData(movieList, 0);
+                changedRange = adapter.updateItems(movieList, 0);
             }
         } catch (IOException e) {
             e.printStackTrace();
