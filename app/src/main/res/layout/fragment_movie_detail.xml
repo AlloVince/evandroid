@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="movie"
             type="com.evandroid.rio.model.Movie" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -37,15 +37,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
+                    android:background="#DDDDDD"
                     android:minHeight="200dp"
                     android:scaleType="fitCenter"
-                    android:background="#DDDDDD"
                     app:layout_collapseMode="parallax" />
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/detail_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    android:title="@null"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -105,6 +106,26 @@
                     android:text="那一年，是听莫扎特、钓鲈鱼和家庭破裂的一年。说到家庭破裂，母亲怪自己当初没有找到好男人，父亲则认为当时是被狐狸精迷住了眼，失常的是母亲，但出问题的是父亲……"
                     android:textColor="#666666"
                     android:textSize="12dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginTop="15dp"
+                    android:background="#AAAAAA" />
+
+                <!--
+                <android.support.v7.widget.recyclerview xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/detail_recycler_view_staffs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerhorizontal="true"
+                    android:layout_centervertical="true"
+                    android:background="#DDDDDD"
+                    android:padding="0dp" />
+                -->
 
             </LinearLayout>
 

@@ -39,18 +39,53 @@ public class MovieDetailActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
+        final FragmentMovieDetailBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_detail, container, false);
+        final View view = binding.getRoot();
+        final Movie movie = new Movie();
+        binding.setMovie(movie);
+
         Picasso imgLoader = ImageLoader.getInstance(getContext());
         ImageView imageView = (ImageView) view.findViewById(R.id.detail_cover);
         imgLoader.load("http://img4.douban.com/view/photo/photo/public/p2240182456.jpg").into(imageView);
         final FloatingActionButton btnFavor = (FloatingActionButton) view.findViewById(R.id.detail_btn_favor);
+        btnFavor.setImageDrawable(new IconDrawable(view.getContext(), FontAwesomeIcons.fa_heart_o).colorRes(R.color.white));
         btnFavor.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
+                Log.w("detail", "abc");
                 btnFavor.setImageDrawable(new IconDrawable(view.getContext(), FontAwesomeIcons.fa_heart).colorRes(R.color.white));
             }
         });
 
+        Intent intent = getActivity().getIntent();
+        int movieId = intent.getIntExtra("DataPosition", 25774051);
+        RestfulClient.promiseApiCall(
+                "https://api.douban.com/v2/movie/subject/" + String.valueOf(movieId)
+        ).done(new DoneCallback<Response>() {
+            public void onDone(Response response) {
+                Gson gson = new Gson();
+                try {
+                    final Movie movie = gson.fromJson(response.body().string(), Movie.class);
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            binding.setMovie(movie);
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).fail(new FailCallback<Object>() {
+            public void onFail(Object obj) {
+                Log.w("avnpc", (String) obj);
+                if (!(obj instanceof ClientInputException)) {
+                    return;
+                }
+                ClientInputException exception = (ClientInputException) obj;
+                Log.w("avnpc", exception.toString());
+            }
+        });
         return view;
     }
 }

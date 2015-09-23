@@ -1,19 +1,10 @@
 package com.evandroid.rio.ui;
 
 
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -24,15 +15,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import com.evandroid.httprest.RestfulClient;
 import com.evandroid.httprest.execption.ClientInputException;
 import com.evandroid.rio.R;
-import com.evandroid.rio.adapter.RecyAdapter;
+import com.evandroid.rio.adapter.MovieListAdapter;
+import com.evandroid.rio.adapter.RecyclerViewBaseAdapter;
 import com.evandroid.rio.model.Movie;
 import com.squareup.okhttp.Response;
 
@@ -45,13 +33,10 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jp.wasabeef.recyclerview.animators.ScaleInAnimator;
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
-import jp.wasabeef.recyclerview.animators.adapters.AlphaInAnimationAdapter;
 
 /**
  * TODO
@@ -69,7 +54,7 @@ public class MovieListActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     //AlphaInAnimationAdapter adapter;
-    RecyAdapter adapter;
+    MovieListAdapter adapter;
     Integer pageNumber = 1;
     Integer direction = UPDATE_DIRECTION_NO_PULL;
     public static int[] colors;
@@ -141,10 +126,10 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        adapter = new RecyAdapter();
+        adapter = new MovieListAdapter();
         adapter.addFooter();
         //adapter.addHeader();
-        //RecyAdapter wrapAdapter = new RecyAdapter();
+        //RecyclerViewBaseAdapter wrapAdapter = new RecyclerViewBaseAdapter();
         //wrapAdapter.setActivity(this);
         //adapter = new AlphaInAnimationAdapter(wrapAdapter);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);

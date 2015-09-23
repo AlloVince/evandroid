@@ -40,6 +40,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         final ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
@@ -52,11 +53,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             setupDrawerContent(navigationView);
         }
 
-        Intent intent = getIntent();
-        int movieId = intent.getIntExtra("DataPosition", 25774051);
 
-        FloatingActionButton btnFavor = (FloatingActionButton) findViewById(R.id.detail_btn_favor);
-        btnFavor.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_heart_o).colorRes(R.color.white));
         /*
         Toast.makeText(
                 this,
@@ -64,38 +61,8 @@ public class MovieDetailActivity extends AppCompatActivity {
                 Toast.LENGTH_SHORT
         ).show();
         */
-        final FragmentMovieDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.fragment_movie_detail);
-        Movie movie = new Movie();
-        movie.setTitle("abc");
-        binding.setMovie(movie);
-        RestfulClient.promiseApiCall(
-                "https://api.douban.com/v2/movie/subject/" + String.valueOf(movieId)
-        ).done(new DoneCallback<Response>() {
-            public void onDone(Response response) {
-                Gson gson = new Gson();
-                try {
-                    final Movie movie = gson.fromJson(response.body().string(), Movie.class);
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            binding.setMovie(movie);
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).fail(new FailCallback<Object>() {
-            public void onFail(Object obj) {
-                Log.w("avnpc", (String) obj);
-                if (!(obj instanceof ClientInputException)) {
-                    return;
-                }
-                ClientInputException exception = (ClientInputException) obj;
-                Log.w("avnpc", exception.toString());
-            }
-        });
+
+
     }
 
 

@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by allovince on 15/9/11.
  */
-public class playground {
+public class Playground {
     public static void main(String arg[]) {
 
         String json = "{\n" +
