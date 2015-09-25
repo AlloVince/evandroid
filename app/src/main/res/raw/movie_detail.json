@@ -1,0 +1,98 @@
+{
+  "rating": {
+    "max": 10,
+    "average": 7,
+    "stars": "35",
+    "min": 0
+  },
+  "reviews_count": 6,
+  "wish_count": 6937,
+  "collect_count": 1453,
+  "douban_site": "",
+  "year": "2015",
+  "images": {
+    "small": "https:\/\/img1.doubanio.com\/view\/movie_poster_cover\/ipst\/public\/p2232822577.jpg",
+    "large": "https:\/\/img1.doubanio.com\/view\/movie_poster_cover\/lpst\/public\/p2232822577.jpg",
+    "medium": "https:\/\/img1.doubanio.com\/view\/movie_poster_cover\/spst\/public\/p2232822577.jpg"
+  },
+  "alt": "http:\/\/movie.douban.com\/subject\/25774051\/",
+  "id": "25774051",
+  "mobile_url": "http:\/\/movie.douban.com\/subject\/25774051\/mobile",
+  "title": "寄生兽：完结篇",
+  "do_count": null,
+  "seasons_count": null,
+  "schedule_url": "",
+  "episodes_count": null,
+  "genres": [
+    "科幻",
+    "恐怖"
+  ],
+  "countries": [
+    "日本"
+  ],
+  "casts": [
+    {
+      "avatars": {
+        "small": "https:\/\/s.doubanio.com\/img\/celebrity\/small\/50940.jpg",
+        "large": "https:\/\/s.doubanio.com\/img\/celebrity\/large\/50940.jpg",
+        "medium": "https:\/\/s.doubanio.com\/img\/celebrity\/medium\/50940.jpg"
+      },
+      "alt": "http:\/\/movie.douban.com\/celebrity\/1315737\/",
+      "id": "1315737",
+      "name": "染谷将太"
+    },
+    {
+      "avatars": {
+        "small": "https:\/\/img2.doubanio.com\/img\/celebrity\/small\/16385.jpg",
+        "large": "https:\/\/img2.doubanio.com\/img\/celebrity\/large\/16385.jpg",
+        "medium": "https:\/\/img2.doubanio.com\/img\/celebrity\/medium\/16385.jpg"
+      },
+      "alt": "http:\/\/movie.douban.com\/celebrity\/1014844\/",
+      "id": "1014844",
+      "name": "深津绘里"
+    },
+    {
+      "avatars": {
+        "small": "https:\/\/img3.doubanio.com\/img\/celebrity\/small\/1421.jpg",
+        "large": "https:\/\/img3.doubanio.com\/img\/celebrity\/large\/1421.jpg",
+        "medium": "https:\/\/img3.doubanio.com\/img\/celebrity\/medium\/1421.jpg"
+      },
+      "alt": "http:\/\/movie.douban.com\/celebrity\/1045927\/",
+      "id": "1045927",
+      "name": "阿部隆史"
+    },
+    {
+      "avatars": {
+        "small": "https:\/\/img3.doubanio.com\/img\/celebrity\/small\/19712.jpg",
+        "large": "https:\/\/img3.doubanio.com\/img\/celebrity\/large\/19712.jpg",
+        "medium": "https:\/\/img3.doubanio.com\/img\/celebrity\/medium\/19712.jpg"
+      },
+      "alt": "http:\/\/movie.douban.com\/celebrity\/1275733\/",
+      "id": "1275733",
+      "name": "桥本爱"
+    }
+  ],
+  "current_season": null,
+  "original_title": "寄生獣 完結編",
+  "summary": "本片为科幻片《寄生兽》精彩完结。某天于地球上空出现许多孢子，其中诞生的幼虫侵入身体后，以寄生于脑部为目标，寄生完成后与脑部细胞同化。",
+  "subtype": "movie",
+  "directors": [
+    {
+      "avatars": {
+        "small": "https:\/\/img3.doubanio.com\/img\/celebrity\/small\/53321.jpg",
+        "large": "https:\/\/img3.doubanio.com\/img\/celebrity\/large\/53321.jpg",
+        "medium": "https:\/\/img3.doubanio.com\/img\/celebrity\/medium\/53321.jpg"
+      },
+      "alt": "http:\/\/movie.douban.com\/celebrity\/1301398\/",
+      "id": "1301398",
+      "name": "山崎贵"
+    }
+  ],
+  "comments_count": 470,
+  "ratings_count": 1140,
+  "aka": [
+    "寄生兽(下)",
+    "Kiseijû: Part 2",
+    "Parasyte: Part 2"
+  ]
+}
