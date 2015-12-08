@@ -13,10 +13,24 @@ android {
         multiDexEnabled true
         //testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
+
+    signingConfigs {
+        playstore {
+            storeFile file("../keys/evandroid.jks")
+            storePassword KEYSTORE_PASS ? KEYSTORE_PASS : System.getenv("KEYSTORE_PASS")
+            keyAlias  ALIAS_NAME ? ALIAS_NAME : System.getenv("ALIAS_NAME")
+            keyPassword ALIAS_PASS ? ALIAS_PASS : System.getenv("ALIAS_PASS")
+        }
+    }
+
     buildTypes {
+        debug {
+
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.playstore
         }
     }
 
