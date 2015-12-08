@@ -14,5 +14,3 @@ deploy:
   file: app/build/outputs/apk/app-release.apk
   skip_cleanup: true
   all_branches: true
-  on:
-    tags: true
