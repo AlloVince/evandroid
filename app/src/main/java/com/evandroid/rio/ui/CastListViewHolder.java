@@ -1,16 +1,12 @@
 package com.evandroid.rio.ui;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.evandroid.rio.R;
-import com.evandroid.rio.adapter.RecyclerViewBaseAdapter;
-import com.evandroid.rio.model.Movie;
-import com.joanzapata.iconify.widget.IconTextView;
+import com.evandroid.rio.viewmodel.Movie;
 
 /**
  * Created by allovince on 15/9/23.

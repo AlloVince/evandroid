@@ -1,4 +1,4 @@
-package com.evandroid.rio.model;
+package com.evandroid.rio.viewmodel;
 
 import java.util.List;
 

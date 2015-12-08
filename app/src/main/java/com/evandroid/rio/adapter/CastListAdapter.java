@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.evandroid.rio.R;
-import com.evandroid.rio.model.Movie;
+import com.evandroid.rio.viewmodel.Movie;
 import com.evandroid.rio.ui.CastListViewHolder;
 import com.evandroid.rio.util.ImageLoader;
 import com.squareup.picasso.Picasso;

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.android.databinding'
 android {
     compileSdkVersion 23
-    buildToolsVersion '22.0.1'
+    buildToolsVersion '23.0.1'
 
     defaultConfig {
         applicationId "com.evandroid.rio"
@@ -10,6 +10,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         //testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
     buildTypes {
@@ -40,10 +41,11 @@ dependencies {
     compile 'com.android.support:support-annotations:23.+'
     compile 'com.android.support:support-v13:23.+'
     compile 'com.android.support:support-v4:23.+'
+    compile 'com.android.support:multidex:1.0.0'
 
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.1.0' // (v4.4)
     compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
-    compile 'com.squareup.okhttp:okhttp:2.4.+'
+    compile 'com.squareup.okhttp:okhttp:2.5.+'
     // http://square.github.io/okhttp/
     compile 'com.facebook.stetho:stetho:1.1.+'
     compile 'com.etsy.android.grid:library:1.0.+'
@@ -58,11 +60,10 @@ dependencies {
     compile 'org.jdeferred:jdeferred-android-aar:1.2.+'
     // https://github.com/jdeferred/jdeferred
 
-    compile 'jp.wasabeef:recyclerview-animators:1.2.+'
     compile 'in.srain.cube:ultra-ptr:1.0.+'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.9.+'
-    testCompile 'com.squareup.okhttp:mockwebserver:2.4+'
+    testCompile 'com.squareup.okhttp:mockwebserver:2.5+'
     testCompile 'org.robolectric:robolectric:3.0'
 }

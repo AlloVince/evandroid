@@ -1,4 +1,4 @@
-package com.evandroid.rio.model;
+package com.evandroid.rio.entity;
 
 import com.evandroid.rio.ui.MovieListActivity;
 
@@ -8,31 +8,6 @@ import java.util.List;
  * Created by allovince on 15/9/9.
  */
 public class Movie {
-    private Integer fill_color;
-
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", fill_color=" + fill_color +
-                ", images=" + images +
-                '}';
-    }
-
-    public int getFill_color() {
-        if (null != fill_color) {
-            return fill_color;
-        }
-        int[] colors = MovieListActivity.colors;
-        int colorIndex = ((int) (Math.random() * 100)) % colors.length;
-        return fill_color = colors[colorIndex];
-    }
-
-    public void setFill_color(int fill_color) {
-        this.fill_color = fill_color;
-    }
-
     /**
      * rating : {"max":10,"average":7.4,"stars":"40","min":0}
      * reviews_count : 286
@@ -218,7 +193,7 @@ public class Movie {
     }
 
     public ImagesEntity getImages() {
-        return images != null ? images : (images = new ImagesEntity());
+        return images;
     }
 
     public String getAlt() {

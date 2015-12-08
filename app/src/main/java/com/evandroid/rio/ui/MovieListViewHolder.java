@@ -9,8 +9,7 @@ import android.widget.TextView;
 
 import com.evandroid.rio.R;
 import com.evandroid.rio.adapter.RecyclerViewBaseAdapter;
-import com.evandroid.rio.model.Movie;
-import com.evandroid.rio.ui.MovieDetailActivity;
+import com.evandroid.rio.viewmodel.Movie;
 import com.joanzapata.iconify.widget.IconTextView;
 
 /**

@@ -20,7 +20,7 @@ import com.evandroid.httprest.RestfulClient;
 import com.evandroid.httprest.execption.ClientInputException;
 import com.evandroid.rio.R;
 import com.evandroid.rio.adapter.MovieListAdapter;
-import com.evandroid.rio.model.Movie;
+import com.evandroid.rio.viewmodel.Movie;
 import com.squareup.okhttp.Response;
 
 import org.jdeferred.DoneCallback;
@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jp.wasabeef.recyclerview.animators.ScaleInAnimator;
 
 /**
  * TODO
@@ -134,7 +133,7 @@ public class MovieListActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(VIEW_COLUMNS, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new ScaleInAnimator());
+        //recyclerView.setItemAnimator(new ScaleInAnimator());
         recyclerView.setAdapter(adapter);
 
         //recyclerView.addItemDecoration(new SpacesItemDecoration(50));

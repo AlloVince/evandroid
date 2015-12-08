@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,14 +14,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.evandroid.httprest.RestfulClient;
 import com.evandroid.httprest.execption.ClientInputException;
 import com.evandroid.rio.R;
 import com.evandroid.rio.adapter.CastListAdapter;
 import com.evandroid.rio.databinding.FragmentMovieDetailBinding;
-import com.evandroid.rio.model.Movie;
+import com.evandroid.rio.viewmodel.Movie;
 import com.evandroid.rio.util.ImageLoader;
 import com.google.gson.Gson;
 import com.joanzapata.iconify.IconDrawable;
@@ -42,6 +42,7 @@ public class MovieDetailActivityFragment extends Fragment {
 
     RecyclerView castRecyclerView;
     CastListAdapter castListAdapter;
+    NestedScrollView nestedScrollView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -139,17 +140,19 @@ public class MovieDetailActivityFragment extends Fragment {
         castListAdapter = new CastListAdapter(casts);
         */
 
-        /*
         castRecyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 int action = event.getAction();
+                Log.d("avnpc", String.format("%d", action));
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:
+                        Log.d("avnpc", "down");
                         // Disallow ScrollView to intercept touch events.
                         v.getParent().requestDisallowInterceptTouchEvent(true);
                         break;
                     case MotionEvent.ACTION_UP:
+                        Log.d("avnpc", "up");
                         //Allow ScrollView to intercept touch events once again.
                         v.getParent().requestDisallowInterceptTouchEvent(false);
                         break;
@@ -159,7 +162,6 @@ public class MovieDetailActivityFragment extends Fragment {
                 return true;
             }
         });
-        */
 
         /*
         getActivity().runOnUiThread(new Runnable() {

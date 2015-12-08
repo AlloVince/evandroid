@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.evandroid.rio.R;
-import com.evandroid.rio.model.Movie;
+import com.evandroid.rio.viewmodel.Movie;
 import com.evandroid.rio.util.ImageLoader;
 import com.evandroid.rio.ui.MovieListViewHolder;
 ;
