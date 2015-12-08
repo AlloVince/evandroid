@@ -59,7 +59,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.0'
 
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.1.0' // (v4.4)
-    compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
+//    compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
     compile 'com.squareup.okhttp:okhttp:2.5.+'
     // http://square.github.io/okhttp/
     compile 'com.facebook.stetho:stetho:1.1.+'

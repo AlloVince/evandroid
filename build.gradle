@@ -21,9 +21,9 @@ allprojects {
     repositories {
         jcenter()
         //For LeanCloud
-        maven {
-            url "http://mvn.leancloud.cn/nexus/content/repositories/releases"
-        }
+//        maven {
+//            url "http://mvn.leancloud.cn/nexus/content/repositories/releases"
+//        }
     }
 }
 
