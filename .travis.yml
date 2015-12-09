@@ -19,4 +19,4 @@ deploy:
     tags: true
     all_branches: true
 after_deploy:
-- fir p app/build/outputs/apk/app-release.apk -T $FIR_TOKEN -c `git cat-file tag $TRAVIS_TAG`
+- fir p app/build/outputs/apk/app-release.apk -T $FIR_TOKEN -c "`git cat-file tag $TRAVIS_TAG`"
