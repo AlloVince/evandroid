@@ -5,6 +5,8 @@ android:
   - android-23
   - extra-android-m2repository
   - extra-android-support
+before_install:
+- gem install fir-cli —no-ri —no-rdoc
 script:
 - "./gradlew assembleRelease"
 deploy:
@@ -16,3 +18,5 @@ deploy:
   on:
     tags: true
     all_branches: true
+after_deploy:
+- fir p app/build/outputs/apk/app-release.apk -T $FIR_TOKEN
