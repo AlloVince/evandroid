@@ -6,7 +6,7 @@ android:
   - extra-android-m2repository
   - extra-android-support
 before_install:
-- gem install fir-cli —no-ri —no-rdoc
+- gem install fir-cli
 script:
 - "./gradlew assembleRelease"
 deploy:
