@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.1'
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         minSdkVersion 19
@@ -26,13 +26,13 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.5.+'
     // http://square.github.io/okhttp/
     //compile 'com.squareup.picasso:picasso:2.5.2'           // https://github.com/square/picasso
-    compile 'com.google.code.gson:gson:2.3.+'
+    compile 'com.google.code.gson:gson:2.8.+'
     // https://github.com/google/gson
     compile 'org.jdeferred:jdeferred-android-aar:1.2.+'
     // https://github.com/jdeferred/jdeferred
     compile 'com.facebook.stetho:stetho:1.1.+'
     compile 'com.facebook.stetho:stetho-okhttp:1.1.+'
-    compile 'org.jsoup:jsoup:1.8.+'
+    compile 'org.jsoup:jsoup:1.10.+'
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.9.+'
     testCompile 'com.squareup.okhttp:mockwebserver:2.4+'
